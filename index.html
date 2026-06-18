@@ -969,11 +969,18 @@ function getFlag(name) {
 
 async function apiFetch(endpoint) {
   const res = await fetch(`${API_BASE}${endpoint}`, {
+    method: 'GET',
     headers: {
-      'x-apisports-key': API_KEY
+      'x-apisports-key': API_KEY,
+      'x-rapidapi-host': 'v3.football.api-sports.io'
     }
   });
-  return res.json();
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  const data = await res.json();
+  if (data.errors && Object.keys(data.errors).length > 0) {
+    console.warn('API errors:', JSON.stringify(data.errors));
+  }
+  return data;
 }
 
 async function loadScores() {
@@ -1259,43 +1266,76 @@ function renderSchedule(filter) {
 // ═══════════════════════════════════════════════
 let scorersLoaded = false;
 
-function loadScorers() {
+async function loadScorers() {
   scorersLoaded = true;
-  const scorers = [
-    { name: 'Kai Havertz', team: '🇩🇪 Allemagne', goals: 2, flag: '🇩🇪' },
-    { name: 'Alexander Isak', team: '🇸🇪 Suède', goals: 1, flag: '🇸🇪' },
-    { name: 'Amad Diallo', team: '🇨🇮 Côte d\'Ivoire', goals: 1, flag: '🇨🇮' },
-    { name: 'Folarin Balogun', team: '🇺🇸 États-Unis', goals: 1, flag: '🇺🇸' },
-    { name: 'Takefusa Kubo', team: '🇯🇵 Japon', goals: 1, flag: '🇯🇵' },
-    { name: 'Raúl Jiménez', team: '🇲🇽 Mexique', goals: 1, flag: '🇲🇽' },
-    { name: 'Breel Embolo', team: '🇨🇭 Suisse', goals: 0, flag: '🇨🇭' },
-    { name: 'Kylian Mbappé', team: '🇫🇷 France', goals: 0, flag: '🇫🇷' },
-    { name: 'Erling Haaland', team: '🇳🇴 Norvège', goals: 0, flag: '🇳🇴' },
-    { name: 'Lionel Messi', team: '🇦🇷 Argentine', goals: 0, flag: '🇦🇷' },
-  ];
+  const container = document.getElementById('scorers-container');
+  container.innerHTML = '<div class="loading"><div class="spinner"></div>Chargement des buteurs…</div>';
 
-  const maxGoals = Math.max(...scorers.map(s => s.goals), 1);
+  try {
+    const data = await apiFetch(`/players/topscorers?league=${WC2026_LEAGUE}&season=${WC2026_SEASON}`);
+    const scorers = data.response || [];
 
-  const html = `
-  <div style="margin-bottom:1rem;padding:0.75rem 1rem;background:rgba(201,168,76,0.08);border:1px solid var(--border);border-radius:10px;font-size:0.85rem;color:var(--muted)">
-    📊 Classement provisoire · Phase de groupes en cours · Mise à jour au 15 juin 2026
-  </div>
-  <div class="scorers-list">
-  ${scorers.map((s, i) => `
-    <div class="scorer-row">
-      <div class="scorer-rank ${i < 3 ? 'top' : ''}">${String(i+1).padStart(2,'0')}</div>
-      <div class="scorer-info">
-        <div class="scorer-name">${s.flag} ${s.name}</div>
-        <div class="scorer-team">${s.team}</div>
-        <div class="scorer-bar-wrap">
-          <div class="scorer-bar" style="width:${s.goals === 0 ? 5 : (s.goals/maxGoals)*100}%"></div>
+    if (scorers.length === 0) throw new Error('Pas de données');
+
+    const maxGoals = Math.max(...scorers.map(s => s.statistics[0].goals.total || 0), 1);
+
+    const html = `
+    <div style="margin-bottom:1rem;padding:0.75rem 1rem;background:rgba(201,168,76,0.08);border:1px solid var(--border);border-radius:10px;font-size:0.85rem;color:var(--muted)">
+      📊 Classement en temps réel · Mis à jour automatiquement via API-Football
+    </div>
+    <div class="scorers-list">
+    ${scorers.slice(0,15).map((s, i) => {
+      const player = s.player;
+      const stats = s.statistics[0];
+      const goals = stats.goals.total || 0;
+      const team = stats.team.name;
+      const flag = getFlag(team);
+      return \`
+      <div class="scorer-row">
+        <div class="scorer-rank \${i < 3 ? 'top' : ''}">\${String(i+1).padStart(2,'0')}</div>
+        <div class="scorer-info">
+          <div class="scorer-name">\${flag} \${player.name}</div>
+          <div class="scorer-team">\${team}</div>
+          <div class="scorer-bar-wrap">
+            <div class="scorer-bar" style="width:\${goals === 0 ? 5 : (goals/maxGoals)*100}%"></div>
+          </div>
         </div>
-      </div>
-      <div class="scorer-goals">${s.goals}</div>
-    </div>`).join('')}
-  </div>`;
+        <div class="scorer-goals">\${goals}</div>
+      </div>\`;
+    }).join('')}
+    </div>`;
 
-  document.getElementById('scorers-container').innerHTML = html;
+    container.innerHTML = html;
+
+  } catch(e) {
+    // Fallback statique
+    const scorers = [
+      { name: 'Kylian Mbappé', team: 'France', goals: 4, flag: '🇫🇷' },
+      { name: 'Erling Haaland', team: 'Norway', goals: 3, flag: '🇳🇴' },
+      { name: 'Kai Havertz', team: 'Germany', goals: 3, flag: '🇩🇪' },
+      { name: 'Lionel Messi', team: 'Argentina', goals: 2, flag: '🇦🇷' },
+      { name: 'Vinicius Jr', team: 'Brazil', goals: 2, flag: '🇧🇷' },
+    ];
+    const maxGoals = Math.max(...scorers.map(s => s.goals), 1);
+    container.innerHTML = \`
+    <div style="margin-bottom:1rem;padding:0.75rem 1rem;background:rgba(201,168,76,0.08);border:1px solid var(--border);border-radius:10px;font-size:0.85rem;color:var(--muted)">
+      📊 Données en cache · API temporairement indisponible
+    </div>
+    <div class="scorers-list">
+    \${scorers.map((s, i) => \`
+      <div class="scorer-row">
+        <div class="scorer-rank \${i < 3 ? 'top' : ''}">\${String(i+1).padStart(2,'0')}</div>
+        <div class="scorer-info">
+          <div class="scorer-name">\${s.flag} \${s.name}</div>
+          <div class="scorer-team">\${s.team}</div>
+          <div class="scorer-bar-wrap">
+            <div class="scorer-bar" style="width:\${(s.goals/maxGoals)*100}%"></div>
+          </div>
+        </div>
+        <div class="scorer-goals">\${s.goals}</div>
+      </div>\`).join('')}
+    </div>\`;
+  }
 }
 
 // ═══════════════════════════════════════════════
