@@ -1268,73 +1268,70 @@ let scorersLoaded = false;
 
 async function loadScorers() {
   scorersLoaded = true;
-  const container = document.getElementById('scorers-container');
-  container.innerHTML = '<div class="loading"><div class="spinner"></div>Chargement des buteurs…</div>';
+  var container = document.getElementById('scorers-container');
+  container.innerHTML = '<div class="loading"><div class="spinner"></div>Chargement des buteurs...</div>';
 
   try {
-    const data = await apiFetch(`/players/topscorers?league=${WC2026_LEAGUE}&season=${WC2026_SEASON}`);
-    const scorers = data.response || [];
+    var data = await apiFetch('/players/topscorers?league=' + WC2026_LEAGUE + '&season=' + WC2026_SEASON);
+    var scorers = data.response || [];
+    if (scorers.length === 0) throw new Error('no data');
 
-    if (scorers.length === 0) throw new Error('Pas de données');
+    var maxGoals = 1;
+    scorers.forEach(function(s) {
+      var g = s.statistics[0].goals.total || 0;
+      if (g > maxGoals) maxGoals = g;
+    });
 
-    const maxGoals = Math.max(...scorers.map(s => s.statistics[0].goals.total || 0), 1);
+    var rows = '';
+    scorers.slice(0, 15).forEach(function(s, i) {
+      var player = s.player;
+      var stats = s.statistics[0];
+      var goals = stats.goals.total || 0;
+      var team = stats.team.name;
+      var flag = getFlag(team);
+      var topClass = i < 3 ? 'top' : '';
+      var rank = String(i+1).padStart(2,'0');
+      var barW = goals === 0 ? 5 : Math.round((goals/maxGoals)*100);
+      rows += '<div class="scorer-row">'
+        + '<div class="scorer-rank ' + topClass + '">' + rank + '</div>'
+        + '<div class="scorer-info">'
+        + '<div class="scorer-name">' + flag + ' ' + player.name + '</div>'
+        + '<div class="scorer-team">' + team + '</div>'
+        + '<div class="scorer-bar-wrap"><div class="scorer-bar" style="width:' + barW + '%"></div></div>'
+        + '</div>'
+        + '<div class="scorer-goals">' + goals + '</div>'
+        + '</div>';
+    });
 
-    const html = `
-    <div style="margin-bottom:1rem;padding:0.75rem 1rem;background:rgba(201,168,76,0.08);border:1px solid var(--border);border-radius:10px;font-size:0.85rem;color:var(--muted)">
-      📊 Classement en temps réel · Mis à jour automatiquement via API-Football
-    </div>
-    <div class="scorers-list">
-    ${scorers.slice(0,15).map((s, i) => {
-      const player = s.player;
-      const stats = s.statistics[0];
-      const goals = stats.goals.total || 0;
-      const team = stats.team.name;
-      const flag = getFlag(team);
-      return \`
-      <div class="scorer-row">
-        <div class="scorer-rank \${i < 3 ? 'top' : ''}">\${String(i+1).padStart(2,'0')}</div>
-        <div class="scorer-info">
-          <div class="scorer-name">\${flag} \${player.name}</div>
-          <div class="scorer-team">\${team}</div>
-          <div class="scorer-bar-wrap">
-            <div class="scorer-bar" style="width:\${goals === 0 ? 5 : (goals/maxGoals)*100}%"></div>
-          </div>
-        </div>
-        <div class="scorer-goals">\${goals}</div>
-      </div>\`;
-    }).join('')}
-    </div>`;
-
-    container.innerHTML = html;
+    container.innerHTML = '<div style="margin-bottom:1rem;padding:0.75rem 1rem;background:rgba(201,168,76,0.08);border:1px solid var(--border);border-radius:10px;font-size:0.85rem;color:var(--muted)">Classement en temps reel - API-Football</div><div class="scorers-list">' + rows + '</div>';
 
   } catch(e) {
-    // Fallback statique
-    const scorers = [
-      { name: 'Kylian Mbappé', team: 'France', goals: 4, flag: '🇫🇷' },
-      { name: 'Erling Haaland', team: 'Norway', goals: 3, flag: '🇳🇴' },
-      { name: 'Kai Havertz', team: 'Germany', goals: 3, flag: '🇩🇪' },
-      { name: 'Lionel Messi', team: 'Argentina', goals: 2, flag: '🇦🇷' },
-      { name: 'Vinicius Jr', team: 'Brazil', goals: 2, flag: '🇧🇷' },
+    console.warn('Scorers fallback:', e);
+    var fallback = [
+      { name: 'Kylian Mbappe', team: 'France', goals: 4, flag: '🇫🇷' },
+      { name: 'Erling Haaland', team: 'Norvege', goals: 3, flag: '🇳🇴' },
+      { name: 'Kai Havertz', team: 'Allemagne', goals: 3, flag: '🇩🇪' },
+      { name: 'Lionel Messi', team: 'Argentine', goals: 2, flag: '🇦🇷' },
+      { name: 'Vinicius Jr', team: 'Bresil', goals: 2, flag: '🇧🇷' },
     ];
-    const maxGoals = Math.max(...scorers.map(s => s.goals), 1);
-    container.innerHTML = \`
-    <div style="margin-bottom:1rem;padding:0.75rem 1rem;background:rgba(201,168,76,0.08);border:1px solid var(--border);border-radius:10px;font-size:0.85rem;color:var(--muted)">
-      📊 Données en cache · API temporairement indisponible
-    </div>
-    <div class="scorers-list">
-    \${scorers.map((s, i) => \`
-      <div class="scorer-row">
-        <div class="scorer-rank \${i < 3 ? 'top' : ''}">\${String(i+1).padStart(2,'0')}</div>
-        <div class="scorer-info">
-          <div class="scorer-name">\${s.flag} \${s.name}</div>
-          <div class="scorer-team">\${s.team}</div>
-          <div class="scorer-bar-wrap">
-            <div class="scorer-bar" style="width:\${(s.goals/maxGoals)*100}%"></div>
-          </div>
-        </div>
-        <div class="scorer-goals">\${s.goals}</div>
-      </div>\`).join('')}
-    </div>\`;
+    var maxG = 1;
+    fallback.forEach(function(s){ if(s.goals > maxG) maxG = s.goals; });
+    var rows2 = '';
+    fallback.forEach(function(s, i) {
+      var topClass = i < 3 ? 'top' : '';
+      var rank = String(i+1).padStart(2,'0');
+      var barW = Math.round((s.goals/maxG)*100);
+      rows2 += '<div class="scorer-row">'
+        + '<div class="scorer-rank ' + topClass + '">' + rank + '</div>'
+        + '<div class="scorer-info">'
+        + '<div class="scorer-name">' + s.flag + ' ' + s.name + '</div>'
+        + '<div class="scorer-team">' + s.team + '</div>'
+        + '<div class="scorer-bar-wrap"><div class="scorer-bar" style="width:' + barW + '%"></div></div>'
+        + '</div>'
+        + '<div class="scorer-goals">' + s.goals + '</div>'
+        + '</div>';
+    });
+    container.innerHTML = '<div style="margin-bottom:1rem;padding:0.75rem 1rem;background:rgba(201,168,76,0.08);border:1px solid var(--border);border-radius:10px;font-size:0.85rem;color:var(--muted)">Donnees en cache - API indisponible</div><div class="scorers-list">' + rows2 + '</div>';
   }
 }
 
