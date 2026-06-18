@@ -864,12 +864,6 @@ Que voulez-vous savoir ? ⚽</div>
 <footer>
   <p>⚽ FIFA World Cup 2026 · USA · Canada · Mexico · 11 juin – 19 juillet 2026</p>
   <p style="margin-top:0.5rem">Données sportives en temps réel · Analyse propulsée par Claude AI</p>
-  <p style="margin-top:1rem">
-    <a href="a-propos.html" style="color:var(--muted);text-decoration:none;margin:0 0.6rem">À propos</a> ·
-    <a href="contact.html" style="color:var(--muted);text-decoration:none;margin:0 0.6rem">Contact</a> ·
-    <a href="mentions-legales.html" style="color:var(--muted);text-decoration:none;margin:0 0.6rem">Mentions légales</a>
-  </p>
-  <p style="margin-top:0.75rem;font-size:0.72rem">© 2026 WC2026 Hub — Site indépendant non affilié à la FIFA</p>
 </footer>
 
 <script>
@@ -945,74 +939,170 @@ function showSection(id) {
 }
 
 // ═══════════════════════════════════════════════
-// SCORES via sports API
 // ═══════════════════════════════════════════════
-let lastScores = null;
+// SCORES EN DIRECT — API-Football
+// ═══════════════════════════════════════════════
+const API_KEY = 'c757176eda0bb5bdb2373b6c92ebfdef';
+const API_BASE = 'https://v3.football.api-sports.io';
+const WC2026_LEAGUE = 1; // FIFA World Cup
+const WC2026_SEASON = 2026;
+
+// Drapeaux emoji par nom de pays
+const FLAGS = {
+  'France':'🇫🇷','Germany':'🇩🇪','Spain':'🇪🇸','Brazil':'🇧🇷','Argentina':'🇦🇷',
+  'Portugal':'🇵🇹','England':'🏴󠁧󠁢󠁥󠁮󠁧󠁿','Netherlands':'🇳🇱','Belgium':'🇧🇪','Croatia':'🇭🇷',
+  'Uruguay':'🇺🇾','Mexico':'🇲🇽','USA':'🇺🇸','United States':'🇺🇸','Canada':'🇨🇦',
+  'Japan':'🇯🇵','South Korea':'🇰🇷','Morocco':'🇲🇦','Senegal':'🇸🇳','Ghana':'🇬🇭',
+  'Australia':'🇦🇺','Switzerland':'🇨🇭','Denmark':'🇩🇰','Sweden':'🇸🇪','Norway':'🇳🇴',
+  'Ecuador':'🇪🇨','Iran':'🇮🇷','Saudi Arabia':'🇸🇦','Tunisia':'🇹🇳','Egypt':'🇪🇬',
+  'New Zealand':'🇳🇿','Paraguay':'🇵🇾','Turkey':'🇹🇷','Colombia':'🇨🇴','Chile':'🇨🇱',
+  'Algeria':'🇩🇿','Nigeria':'🇳🇬','Cameroon':'🇨🇲','South Africa':'🇿🇦','Serbia':'🇷🇸',
+  'Austria':'🇦🇹','Czech Republic':'🇨🇿','Slovakia':'🇸🇰','Scotland':'🏴󠁧󠁢󠁳󠁣󠁴󠁿','Ireland':'🇮🇪',
+  'Ukraine':'🇺🇦','Poland':'🇵🇱','Qatar':'🇶🇦','Iraq':'🇮🇶','Jordan':'🇯🇴',
+  'Uzbekistan':'🇺🇿','Haiti':'🇭🇹','Cape Verde':'🇨🇻','Ivory Coast':'🇨🇮','DR Congo':'🇨🇩',
+  'Bosnia':'🇧🇦','Panama':'🇵🇦','Curacao':'🇨🇼','Italy':'🇮🇹','Greece':'🇬🇷',
+};
+
+function getFlag(name) {
+  return FLAGS[name] || '🏳️';
+}
+
+async function apiFetch(endpoint) {
+  const res = await fetch(`${API_BASE}${endpoint}`, {
+    headers: {
+      'x-apisports-key': API_KEY
+    }
+  });
+  return res.json();
+}
 
 async function loadScores() {
+  const container = document.getElementById('matches-container');
+  const now = new Date();
+
   try {
-    const url = 'https://api.anthropic.com/v1/messages';
-    // Use Claude to format sports data since we can't hit external APIs
-    // We'll display static live-feel data based on what we know
-    renderStaticScores();
+    // Récupérer les matchs du jour (live + aujourd'hui)
+    const today = now.toISOString().split('T')[0];
+    const [liveData, todayData] = await Promise.all([
+      apiFetch(`/fixtures?league=${WC2026_LEAGUE}&season=${WC2026_SEASON}&live=all`),
+      apiFetch(`/fixtures?league=${WC2026_LEAGUE}&season=${WC2026_SEASON}&date=${today}`)
+    ]);
+
+    // Fusionner live + aujourd'hui sans doublons
+    const liveIds = new Set((liveData.response || []).map(f => f.fixture.id));
+    const allFixtures = [
+      ...(liveData.response || []),
+      ...(todayData.response || []).filter(f => !liveIds.has(f.fixture.id))
+    ];
+
+    // Si pas de matchs aujourd'hui, charger les derniers matchs joués
+    let fixtures = allFixtures;
+    if (fixtures.length === 0) {
+      const recentData = await apiFetch(`/fixtures?league=${WC2026_LEAGUE}&season=${WC2026_SEASON}&last=10`);
+      fixtures = recentData.response || [];
+    }
+
+    if (fixtures.length === 0) {
+      container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--muted)">Aucun match trouvé pour aujourd'hui. Le prochain match est bientôt !</div>`;
+      return;
+    }
+
+    // Calculer les buts totaux
+    let totalGoals = 0;
+    fixtures.forEach(f => {
+      if (f.goals.home !== null) totalGoals += (f.goals.home || 0) + (f.goals.away || 0);
+    });
+    document.getElementById('goals-count').textContent = totalGoals;
+
+    // Mise à jour heure
+    document.getElementById('update-time').textContent =
+      '⟳ Dernière mise à jour : ' + now.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'}) + ' · Auto-refresh toutes les 60s';
+
+    // Rendu des matchs
+    const html = fixtures.map(f => {
+      const status = f.fixture.status;
+      const homeTeam = f.teams.home.name;
+      const awayTeam = f.teams.away.name;
+      const homeScore = f.goals.home;
+      const awayScore = f.goals.away;
+      const isLive = ['1H','2H','HT','ET','BT','P'].includes(status.short);
+      const isDone = status.short === 'FT' || status.short === 'AET' || status.short === 'PEN';
+      const isUpcoming = !isLive && !isDone;
+      const minute = f.fixture.status.elapsed;
+      const venue = f.fixture.venue?.name || '';
+      const group = f.league.round || '';
+
+      // Heure locale du match
+      const matchTime = new Date(f.fixture.date).toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
+
+      const scoreHtml = isLive
+        ? `<div class="live-badge">LIVE ${minute}'</div><div class="match-score live-score">${homeScore ?? 0} – ${awayScore ?? 0}</div>`
+        : isDone
+          ? `<div class="match-score">${homeScore} – ${awayScore}</div>`
+          : `<div class="match-score" style="color:var(--muted);font-size:1.2rem">${matchTime}</div>`;
+
+      const statusLabel = isLive ? '🔴 EN DIRECT' : isDone ? 'Terminé' : 'À venir';
+
+      return `
+      <div class="match-card ${isLive ? 'live' : ''}">
+        <div class="team-side">
+          <span style="font-size:2rem">${getFlag(homeTeam)}</span>
+          <span class="team-name">${homeTeam}</span>
+        </div>
+        <div class="match-center">
+          ${scoreHtml}
+          <div class="match-info">${group} · ${venue}</div>
+          <div class="match-info" style="margin-top:2px">${statusLabel}</div>
+        </div>
+        <div class="team-side right">
+          <span style="font-size:2rem">${getFlag(awayTeam)}</span>
+          <span class="team-name">${awayTeam}</span>
+        </div>
+      </div>`;
+    }).join('');
+
+    container.innerHTML = html;
+
   } catch(e) {
+    console.error('API Error:', e);
+    document.getElementById('update-time').textContent = '⚠️ Erreur de connexion à l\'API — données en cache affichées';
     renderStaticScores();
   }
 }
 
+// Fallback statique si API indisponible
 function renderStaticScores() {
   const now = new Date();
-  document.getElementById('update-time').textContent = 
-    '⟳ Dernière mise à jour : ' + now.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'}) + ' · Auto-refresh toutes les 60s';
+  document.getElementById('update-time').textContent =
+    '⟳ Cache local · ' + now.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
 
-  // Real matches from today June 15, 2026 — Group G & I starting
   const matches = [
-    // LIVE or recent based on real WC2026 data
-    { home: '🇪🇸 Espagne', away: '🇨🇻 Cap-Vert', homeScore: 5, awayScore: 0, status: 'Terminé', group: 'Groupe H', venue: 'Kansas City', minute: null },
-    { home: '🇸🇦 Arabie Saoudite', away: '🇺🇾 Uruguay', homeScore: null, awayScore: null, status: 'À venir', group: 'Groupe H', venue: 'Houston', minute: null, time: '21h00' },
-    { home: '🇮🇷 Iran', away: '🇳🇿 Nouvelle-Zélande', homeScore: null, awayScore: null, status: 'À venir', group: 'Groupe G', venue: 'Vancouver', minute: null, time: '19h00' },
-    { home: '🇧🇪 Belgique', away: '🇪🇬 Égypte', homeScore: null, awayScore: null, status: 'À venir', group: 'Groupe G', venue: 'Miami', minute: null, time: '21h00' },
-    // Previous results
-    { home: '🇩🇪 Allemagne', away: '🇨🇮 Côte d\'Ivoire', homeScore: 4, awayScore: 0, status: 'Terminé', group: 'Groupe E', venue: 'Atlanta', minute: null },
-    { home: '🇸🇪 Suède', away: '🇯🇵 Japon', homeScore: 1, awayScore: 2, status: 'Terminé', group: 'Groupe F', venue: 'Dallas', minute: null },
-    { home: '🇳🇱 Pays-Bas', away: '🇹🇳 Tunisie', homeScore: 2, awayScore: 2, status: 'Terminé', group: 'Groupe F', venue: 'Philadelphia', minute: null },
-    { home: '🇦🇺 Australie', away: '🇹🇷 Türkiye', homeScore: 2, awayScore: 1, status: 'Terminé', group: 'Groupe D', venue: 'Seattle', minute: null },
-    { home: '🇺🇸 États-Unis', away: '🇵🇾 Paraguay', homeScore: 1, awayScore: 0, status: 'Terminé', group: 'Groupe D', venue: 'Los Angeles', minute: null },
-    { home: '🇫🇷 France', away: '🇮🇶 Irak', homeScore: null, awayScore: null, status: 'À venir · 16 juin', group: 'Groupe I', venue: 'Miami', time: '18h00' },
-    { home: '🇳🇴 Norvège', away: '🇸🇳 Sénégal', homeScore: null, awayScore: null, status: 'À venir · 16 juin', group: 'Groupe I', venue: 'Dallas', time: '21h00' },
+    { home: '🇪🇸 Espagne', away: '🇨🇻 Cap-Vert', homeScore: 5, awayScore: 0, status: 'Terminé', group: 'Groupe H', venue: 'Kansas City' },
+    { home: '🇩🇪 Allemagne', away: '🇨🇮 Côte d\'Ivoire', homeScore: 4, awayScore: 0, status: 'Terminé', group: 'Groupe E', venue: 'Atlanta' },
+    { home: '🇯🇵 Japon', away: '🇸🇪 Suède', homeScore: 2, awayScore: 1, status: 'Terminé', group: 'Groupe F', venue: 'Dallas' },
+    { home: '🇦🇺 Australie', away: '🇹🇷 Türkiye', homeScore: 2, awayScore: 1, status: 'Terminé', group: 'Groupe D', venue: 'Seattle' },
   ];
 
-  // Count goals
   let goals = 0;
   matches.forEach(m => { if(m.homeScore !== null) goals += m.homeScore + m.awayScore; });
   document.getElementById('goals-count').textContent = goals;
 
-  const html = matches.map(m => {
-    const isLive = m.status === 'En direct';
-    const isDone = m.homeScore !== null && !isLive;
-    const scoreHtml = isLive
-      ? `<div class="live-badge">LIVE ${m.minute}'</div><div class="match-score live-score">${m.homeScore} – ${m.awayScore}</div>`
-      : isDone
-        ? `<div class="match-score">${m.homeScore} – ${m.awayScore}</div>`
-        : `<div class="match-score" style="color:var(--muted);font-size:1.1rem">${m.time || '–'}</div>`;
-
-    return `
-    <div class="match-card ${isLive ? 'live' : ''}">
+  const html = matches.map(m => `
+    <div class="match-card">
       <div class="team-side">
         <span style="font-size:2rem">${m.home.split(' ')[0]}</span>
         <span class="team-name">${m.home.replace(/^\S+ /, '')}</span>
       </div>
       <div class="match-center">
-        ${scoreHtml}
+        <div class="match-score">${m.homeScore} – ${m.awayScore}</div>
         <div class="match-info">${m.group} · ${m.venue}</div>
-        <div class="match-info" style="margin-top:2px">${isLive ? '🔴 EN DIRECT' : m.status}</div>
+        <div class="match-info">${m.status}</div>
       </div>
       <div class="team-side right">
         <span style="font-size:2rem">${m.away.split(' ')[0]}</span>
         <span class="team-name">${m.away.replace(/^\S+ /, '')}</span>
       </div>
-    </div>`;
-  }).join('');
+    </div>`).join('');
 
   document.getElementById('matches-container').innerHTML = html;
 }
