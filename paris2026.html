@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paris Sportifs Coupe du Monde 2026 — Cotes & Pronostics</title>
+<meta name="description" content="Meilleures cotes Coupe du Monde 2026, pronostics IA, comparatif bookmakers. Offres de bienvenue exclusives Betclic, Winamax, Unibet.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+:root {
+  --gold: #F59E0B;
+  --gold2: #C9A84C;
+  --dark: #0A0A0F;
+  --dark3: #1A1A24;
+  --dark4: #22222F;
+  --green: #00E676;
+  --text: #E8E8F0;
+  --muted: #6A6A80;
+  --border: rgba(245,158,11,0.15);
+  --red: #FF4444;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { background:var(--dark); color:var(--text); font-family:'Inter',sans-serif; }
+
+/* HEADER */
+header {
+  background: linear-gradient(135deg, #0D1A00, #1A2800);
+  border-bottom: 1px solid var(--border);
+  padding: 1.5rem 2rem;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+}
+.header-brand { display:flex; align-items:center; gap:1rem; }
+.header-title { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; color:var(--gold); letter-spacing:0.05em; }
+.header-sub { font-size:0.8rem; color:var(--muted); }
+.back-btn { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:var(--text); padding:0.5rem 1rem; border-radius:8px; text-decoration:none; font-size:0.85rem; transition:all 0.2s; }
+.back-btn:hover { background:rgba(255,255,255,0.1); }
+
+/* LEGAL */
+.legal-bar {
+  background: rgba(245,158,11,0.08);
+  border-bottom: 1px solid rgba(245,158,11,0.2);
+  padding: 0.6rem 2rem;
+  font-size: 0.75rem; color: #F59E0B;
+  display: flex; align-items: center; gap: 0.5rem; justify-content: center;
+  text-align: center;
+}
+
+/* CONTAINER */
+.container { max-width:1100px; margin:0 auto; padding:0 1.5rem; }
+.section { padding:3rem 0; }
+.section-title {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:2rem; color:var(--gold); letter-spacing:0.05em;
+  margin-bottom:0.4rem;
+}
+.section-sub { color:var(--muted); font-size:0.88rem; margin-bottom:2rem; }
+
+/* HERO BANNER */
+.hero-banner {
+  background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(201,168,76,0.05));
+  border: 1px solid rgba(245,158,11,0.25);
+  border-radius: 16px;
+  padding: 2.5rem;
+  text-align: center;
+  margin: 2rem 0 3rem;
+}
+.hero-banner h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(2rem,5vw,3.5rem); color:var(--gold); letter-spacing:0.05em; margin-bottom:0.5rem; }
+.hero-banner p { color:var(--muted); font-size:0.95rem; margin-bottom:1.5rem; }
+.cta-row { display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap; }
+.cta-primary { background:linear-gradient(135deg,#F59E0B,#C9A84C); color:#000; font-weight:700; padding:0.85rem 2rem; border-radius:10px; text-decoration:none; font-size:0.95rem; transition:opacity 0.2s; }
+.cta-primary:hover { opacity:0.85; }
+.cta-secondary { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); color:var(--text); padding:0.85rem 2rem; border-radius:10px; text-decoration:none; font-size:0.95rem; transition:all 0.2s; }
+.cta-secondary:hover { background:rgba(255,255,255,0.1); }
+
+/* BOOKMAKERS GRID */
+.bookies-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1.25rem; }
+.bookie-card {
+  background:var(--dark3);
+  border:1px solid rgba(245,158,11,0.2);
+  border-radius:14px;
+  padding:1.5rem;
+  transition:all 0.25s;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+}
+.bookie-card::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:3px;
+  opacity:0; transition:opacity 0.2s;
+}
+.bookie-card:hover { border-color:rgba(245,158,11,0.6); transform:translateY(-3px); box-shadow:0 12px 40px rgba(245,158,11,0.12); }
+.bookie-card:hover::before { opacity:1; }
+.bookie-badge { position:absolute; top:1rem; right:1rem; background:var(--green); color:#000; font-size:0.65rem; font-weight:700; padding:0.2rem 0.5rem; border-radius:4px; letter-spacing:0.05em; }
+.bookie-logo-text { font-family:'Bebas Neue',sans-serif; font-size:2rem; letter-spacing:0.05em; margin-bottom:0.75rem; display:block; }
+.bookie-bonus { font-size:1.1rem; font-weight:700; color:var(--text); margin-bottom:0.25rem; }
+.bookie-cond { font-size:0.78rem; color:var(--muted); margin-bottom:1rem; line-height:1.5; }
+.bookie-stars { color:#F59E0B; font-size:0.85rem; margin-bottom:1rem; }
+.bookie-btn { width:100%; background:linear-gradient(135deg,#F59E0B,#C9A84C); border:none; border-radius:8px; padding:0.7rem; color:#000; font-weight:700; font-size:0.88rem; cursor:pointer; letter-spacing:0.02em; transition:opacity 0.2s; }
+.bookie-btn:hover { opacity:0.85; }
+
+/* COMPARATEUR */
+.compare-table { width:100%; border-collapse:collapse; background:var(--dark3); border-radius:12px; overflow:hidden; border:1px solid var(--border); }
+.compare-table th { padding:0.85rem 1rem; background:rgba(245,158,11,0.08); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); text-align:center; border-bottom:1px solid var(--border); }
+.compare-table th:first-child { text-align:left; }
+.compare-table td { padding:0.85rem 1rem; font-size:0.88rem; text-align:center; border-bottom:1px solid rgba(255,255,255,0.04); }
+.compare-table td:first-child { text-align:left; font-weight:600; }
+.compare-table tr:last-child td { border-bottom:none; }
+.compare-table tr:hover td { background:rgba(255,255,255,0.02); }
+.check { color:var(--green); font-size:1rem; }
+.cross { color:var(--red); }
+.tag { display:inline-block; background:rgba(245,158,11,0.12); color:#F59E0B; font-size:0.7rem; padding:0.15rem 0.5rem; border-radius:4px; font-weight:600; }
+
+/* COTES */
+.match-odds { background:var(--dark3); border:1px solid var(--border); border-radius:12px; padding:1.25rem 1.5rem; margin-bottom:1rem; }
+.match-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem; }
+.match-teams { font-weight:700; font-size:1rem; }
+.match-meta { font-size:0.78rem; color:var(--muted); }
+.odds-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.75rem; }
+.odd-box { background:var(--dark4); border:1px solid rgba(255,255,255,0.07); border-radius:10px; padding:0.85rem; text-align:center; cursor:pointer; transition:all 0.2s; }
+.odd-box:hover { background:rgba(245,158,11,0.1); border-color:rgba(245,158,11,0.4); }
+.odd-type { font-size:0.7rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem; }
+.odd-value { font-family:'Bebas Neue',sans-serif; font-size:2rem; color:#F59E0B; line-height:1; }
+.odd-bookie { font-size:0.65rem; color:var(--muted); margin-top:0.25rem; }
+.prono-badge { display:inline-block; background:rgba(0,230,118,0.1); border:1px solid rgba(0,230,118,0.3); color:var(--green); padding:0.2rem 0.6rem; border-radius:5px; font-size:0.72rem; font-weight:600; margin-left:0.75rem; }
+
+/* PRONOSTICS */
+.prono-full { background:var(--dark3); border:1px solid var(--border); border-radius:12px; padding:1.5rem; margin-bottom:1rem; }
+.prono-header { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin-bottom:1rem; flex-wrap:wrap; }
+.prono-match-name { font-weight:700; font-size:1.05rem; }
+.prono-group { font-size:0.78rem; color:var(--muted); margin-top:0.15rem; }
+.prono-verdict { background:rgba(0,230,118,0.08); border:1px solid rgba(0,230,118,0.25); border-radius:8px; padding:0.85rem 1rem; margin-bottom:0.75rem; }
+.prono-pick-label { font-size:0.7rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:0.25rem; }
+.prono-pick-val { font-weight:700; color:var(--green); font-size:1rem; }
+.prono-analysis { font-size:0.85rem; color:var(--muted); line-height:1.6; margin-bottom:0.75rem; }
+.confidence-row { display:flex; align-items:center; gap:1rem; }
+.conf-label { font-size:0.78rem; color:var(--muted); white-space:nowrap; }
+.conf-bar { flex:1; height:6px; background:var(--dark4); border-radius:3px; }
+.conf-fill { height:100%; border-radius:3px; background:linear-gradient(90deg,var(--green),#00A854); }
+.conf-pct { font-family:'JetBrains Mono',monospace; font-size:0.82rem; color:var(--green); font-weight:600; }
+.loading-ai { text-align:center; padding:2rem; color:var(--muted); font-size:0.9rem; }
+
+/* TIPS */
+.tips-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1rem; }
+.tip-card { background:var(--dark3); border:1px solid var(--border); border-radius:12px; padding:1.25rem; }
+.tip-icon { font-size:2rem; margin-bottom:0.75rem; }
+.tip-title { font-weight:700; margin-bottom:0.5rem; }
+.tip-text { font-size:0.85rem; color:var(--muted); line-height:1.6; }
+
+/* FOOTER */
+footer { border-top:1px solid var(--border); padding:2rem; text-align:center; color:var(--muted); font-size:0.78rem; line-height:1.8; }
+.spinner { width:32px; height:32px; border:3px solid var(--dark4); border-top-color:var(--gold); border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 1rem; }
+@keyframes spin { to{transform:rotate(360deg)} }
+
+@media (max-width:640px) {
+  header { padding:1rem; }
+  .odds-row { grid-template-columns:1fr 1fr 1fr; gap:0.5rem; }
+  .odd-value { font-size:1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <div>
+      <div class="header-title">⚽ Paris WC2026</div>
+      <div class="header-sub">Cotes · Pronostics IA · Comparatif bookmakers</div>
+    </div>
+  </div>
+  <a href="worldcup2026.html" class="back-btn">← Retour au site</a>
+</header>
+
+<div class="legal-bar">
+  ⚠️ Jouer comporte des risques : endettement, dépendance… Appelez le <strong>09 74 75 13 13</strong> (gratuit). Interdit aux mineurs. Jeu agréé ANJ.
+</div>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero-banner">
+    <h1>🏆 Meilleurs Paris · Coupe du Monde 2026</h1>
+    <p>Comparez les cotes, profitez des offres de bienvenue et suivez nos pronostics générés par IA</p>
+    <div class="cta-row">
+      <a href="#bookmakers" class="cta-primary">Voir les offres →</a>
+      <a href="#pronostics" class="cta-secondary">Pronostics IA</a>
+    </div>
+  </div>
+
+  <!-- BOOKMAKERS -->
+  <div class="section" id="bookmakers">
+    <div class="section-title">🎁 Offres de bienvenue</div>
+    <p class="section-sub">Profitez des bonus exclusifs pour les nouveaux inscrits · Jusqu'à 200€ offerts</p>
+    <div class="bookies-grid">
+
+      <div class="bookie-card" onclick="goAffiliate('betclic')">
+        <span class="bookie-badge">TOP 1</span>
+        <span class="bookie-logo-text" style="color:#E30613">BETCLIC</span>
+        <div class="bookie-bonus">100€ remboursés</div>
+        <div class="bookie-cond">Premier pari remboursé si perdant · Dès 1€ de dépôt · Retrait rapide</div>
+        <div class="bookie-stars">★★★★★ · Note : 9.5/10</div>
+        <button class="bookie-btn" style="background:linear-gradient(135deg,#E30613,#FF4444)">J'en profite →</button>
+      </div>
+
+      <div class="bookie-card" onclick="goAffiliate('winamax')">
+        <span class="bookie-badge">TOP 2</span>
+        <span class="bookie-logo-text" style="color:#FF6B00">WINAMAX</span>
+        <div class="bookie-bonus">200€ en Freebets</div>
+        <div class="bookie-cond">Premier dépôt doublé jusqu'à 200€ · N°1 français · App mobile excellente</div>
+        <div class="bookie-stars">★★★★★ · Note : 9.3/10</div>
+        <button class="bookie-btn" style="background:linear-gradient(135deg,#FF6B00,#FF8C00)">J'en profite →</button>
+      </div>
+
+      <div class="bookie-card" onclick="goAffiliate('unibet')">
+        <span class="bookie-logo-text" style="color:#007B5E">UNIBET</span>
+        <div class="bookie-bonus">150€ en Paris Gratuits</div>
+        <div class="bookie-cond">Réparti sur vos 3 premiers paris · Cotes boostées Coupe du Monde</div>
+        <div class="bookie-stars">★★★★☆ · Note : 8.8/10</div>
+        <button class="bookie-btn" style="background:linear-gradient(135deg,#007B5E,#00A878)">J'en profite →</button>
+      </div>
+
+      <div class="bookie-card" onclick="goAffiliate('pmu')">
+        <span class="bookie-logo-text" style="color:#0050C8">PMU</span>
+        <div class="bookie-bonus">100€ en Freebets</div>
+        <div class="bookie-cond">Opérateur officiel FDJ · Agréé ANJ · Très sécurisé · Cash out disponible</div>
+        <div class="bookie-stars">★★★★☆ · Note : 8.5/10</div>
+        <button class="bookie-btn" style="background:linear-gradient(135deg,#003087,#0050C8)">J'en profite →</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- COMPARATEUR -->
+  <div class="section">
+    <div class="section-title">📊 Comparatif bookmakers</div>
+    <p class="section-sub">Fonctionnalités clés pour choisir le bon opérateur</p>
+    <div style="overflow-x:auto">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Bookmaker</th>
+          <th>Bonus</th>
+          <th>Cash Out</th>
+          <th>Live Streaming</th>
+          <th>App Mobile</th>
+          <th>Cotes FIFA</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span style="color:#E30613;font-family:'Bebas Neue',sans-serif;font-size:1.1rem">BETCLIC</span></td>
+          <td><span class="tag">100€</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓ iOS/Android</span></td>
+          <td>⭐⭐⭐⭐⭐</td>
+          <td><button onclick="goAffiliate('betclic')" class="bookie-btn" style="padding:0.4rem 0.75rem;font-size:0.78rem;width:auto">Ouvrir →</button></td>
+        </tr>
+        <tr>
+          <td><span style="color:#FF6B00;font-family:'Bebas Neue',sans-serif;font-size:1.1rem">WINAMAX</span></td>
+          <td><span class="tag">200€</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="check">✓ iOS/Android</span></td>
+          <td>⭐⭐⭐⭐⭐</td>
+          <td><button onclick="goAffiliate('winamax')" class="bookie-btn" style="padding:0.4rem 0.75rem;font-size:0.78rem;width:auto">Ouvrir →</button></td>
+        </tr>
+        <tr>
+          <td><span style="color:#007B5E;font-family:'Bebas Neue',sans-serif;font-size:1.1rem">UNIBET</span></td>
+          <td><span class="tag">150€</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓ iOS/Android</span></td>
+          <td>⭐⭐⭐⭐</td>
+          <td><button onclick="goAffiliate('unibet')" class="bookie-btn" style="padding:0.4rem 0.75rem;font-size:0.78rem;width:auto">Ouvrir →</button></td>
+        </tr>
+        <tr>
+          <td><span style="color:#0050C8;font-family:'Bebas Neue',sans-serif;font-size:1.1rem">PMU</span></td>
+          <td><span class="tag">100€</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="check">✓ iOS/Android</span></td>
+          <td>⭐⭐⭐⭐</td>
+          <td><button onclick="goAffiliate('pmu')" class="bookie-btn" style="padding:0.4rem 0.75rem;font-size:0.78rem;width:auto">Ouvrir →</button></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- COTES DU JOUR -->
+  <div class="section">
+    <div class="section-title">💹 Cotes des prochains matchs</div>
+    <p class="section-sub">Cotes indicatives · Cliquer sur une cote pour parier</p>
+
+    <div id="odds-section"></div>
+  </div>
+
+  <!-- PRONOSTICS IA -->
+  <div class="section" id="pronostics">
+    <div class="section-title">🤖 Pronostics IA — Coupe du Monde 2026</div>
+    <p class="section-sub">Analyse générée par intelligence artificielle · Mis à jour quotidiennement</p>
+    <div id="pronostics-section">
+      <div class="loading-ai"><div class="spinner"></div>Génération des pronostics par IA…</div>
+    </div>
+  </div>
+
+  <!-- CONSEILS -->
+  <div class="section">
+    <div class="section-title">💡 Conseils pour bien parier</div>
+    <p class="section-sub">Quelques principes pour parier de façon éclairée</p>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <div class="tip-icon">🎯</div>
+        <div class="tip-title">Comparez les cotes</div>
+        <div class="tip-text">Une différence de 0.10 sur une cote peut représenter des dizaines d'euros sur la durée. Toujours comparer avant de miser.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">📊</div>
+        <div class="tip-title">Analysez les statistiques</div>
+        <div class="tip-text">Forme récente, confrontations directes, absences clés, contexte du match. Notre IA intègre tous ces facteurs.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">💰</div>
+        <div class="tip-title">Gérez votre bankroll</div>
+        <div class="tip-text">Ne misez jamais plus de 2-5% de votre capital sur un seul pari. La régularité prime sur la prise de risque.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🛑</div>
+        <div class="tip-title">Fixez-vous des limites</div>
+        <div class="tip-text">Définissez un budget mensuel et respectez-le. Le jeu doit rester un divertissement, pas une source de revenus.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>⚽ Paris Sportifs Coupe du Monde 2026 · Tous droits réservés</p>
+  <p>Ce site contient des liens affiliés. En vous inscrivant via nos liens, vous nous aidez à financer ce site gratuitement.</p>
+  <p style="margin-top:0.5rem">🔞 Interdit aux mineurs · Jeu responsable : <strong>09 74 75 13 13</strong> (gratuit, 7j/7)</p>
+  <p>Opérateurs agréés ANJ uniquement · Les cotes affichées sont indicatives et peuvent varier</p>
+  <p style="margin-top:1rem">
+    <a href="a-propos.html" style="color:var(--muted);text-decoration:none;margin:0 0.6rem">À propos</a> ·
+    <a href="contact.html" style="color:var(--muted);text-decoration:none;margin:0 0.6rem">Contact</a> ·
+    <a href="mentions-legales.html" style="color:var(--muted);text-decoration:none;margin:0 0.6rem">Mentions légales</a>
+  </p>
+</footer>
+
+<script>
+const AFFILIATE_LINKS = {
+  betclic: 'https://www.betclic.fr/?affid=VOTRE_ID_BETCLIC',
+  winamax: 'https://www.winamax.fr/?affid=VOTRE_ID_WINAMAX',
+  unibet:  'https://www.unibet.fr/?affid=VOTRE_ID_UNIBET',
+  pmu:     'https://www.pmu.fr/?affid=VOTRE_ID_PMU',
+};
+
+function goAffiliate(b) { window.open(AFFILIATE_LINKS[b], '_blank'); }
+
+const MATCHES = [
+  { home:'🇮🇷 Iran', away:'🇳🇿 Nouvelle-Zélande', group:'Groupe G', date:'15 juin · 19h00', h:1.55, d:3.80, a:5.50, tip:'Iran' },
+  { home:'🇧🇪 Belgique', away:'🇪🇬 Égypte', group:'Groupe G', date:'15 juin · 21h00', h:1.40, d:4.20, a:7.00, tip:'Belgique' },
+  { home:'🇸🇦 Arabie Saoudite', away:'🇺🇾 Uruguay', group:'Groupe H', date:'15 juin · 21h00', h:3.20, d:3.10, a:2.10, tip:'Uruguay' },
+  { home:'🇫🇷 France', away:'🇮🇶 Irak', group:'Groupe I', date:'16 juin · 18h00', h:1.18, d:6.50, a:14.00, tip:'France' },
+  { home:'🇳🇴 Norvège', away:'🇸🇳 Sénégal', group:'Groupe I', date:'16 juin · 21h00', h:2.40, d:3.20, a:2.80, tip:null },
+  { home:'🇦🇷 Argentine', away:'🇩🇿 Algérie', group:'Groupe J', date:'17 juin · 21h00', h:1.30, d:5.00, a:9.00, tip:'Argentine' },
+  { home:'🇵🇹 Portugal', away:'🇺🇿 Ouzbékistan', group:'Groupe K', date:'17 juin · 18h00', h:1.22, d:6.00, a:12.00, tip:'Portugal' },
+  { home:'🏴󠁧󠁢󠁥󠁮󠁧󠁿 Angleterre', away:'🇭🇷 Croatie', group:'Groupe L', date:'17 juin · 21h00', h:1.60, d:3.60, a:5.20, tip:'Angleterre' },
+];
+
+function renderOdds() {
+  document.getElementById('odds-section').innerHTML = MATCHES.map(m => `
+  <div class="match-odds">
+    <div class="match-header">
+      <div>
+        <div class="match-teams">${m.home} <span style="color:var(--muted)">vs</span> ${m.away}
+          ${m.tip ? `<span class="prono-badge">✅ ${m.tip}</span>` : ''}
+        </div>
+        <div class="match-meta">${m.group} · ${m.date}</div>
+      </div>
+      <button onclick="goAffiliate('betclic')" style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);color:#F59E0B;padding:0.4rem 0.85rem;border-radius:7px;cursor:pointer;font-size:0.78rem;font-family:'Inter',sans-serif">Parier →</button>
+    </div>
+    <div class="odds-row">
+      <div class="odd-box" onclick="goAffiliate('betclic')">
+        <div class="odd-type">Victoire ${m.home.replace(/^\S+ /,'')}</div>
+        <div class="odd-value">${m.h.toFixed(2)}</div>
+        <div class="odd-bookie">Betclic</div>
+      </div>
+      <div class="odd-box" onclick="goAffiliate('winamax')">
+        <div class="odd-type">Match nul</div>
+        <div class="odd-value">${m.d.toFixed(2)}</div>
+        <div class="odd-bookie">Winamax</div>
+      </div>
+      <div class="odd-box" onclick="goAffiliate('unibet')">
+        <div class="odd-type">Victoire ${m.away.replace(/^\S+ /,'')}</div>
+        <div class="odd-value">${m.a.toFixed(2)}</div>
+        <div class="odd-bookie">Unibet</div>
+      </div>
+    </div>
+  </div>`).join('') + `<div style="font-size:0.72rem;color:var(--muted);margin-top:0.5rem;text-align:right">Cotes indicatives · Cliquer pour voir les cotes en temps réel</div>`;
+}
+
+async function loadPronostics() {
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:1000,
+        system:`Tu es un expert pronostiqueur football professionnel. Réponds UNIQUEMENT en JSON valide, sans texte autour, sans balises markdown.
+Format exact : [{"match":"🇧🇪 Belgique vs 🇪🇬 Égypte","group":"Groupe G","date":"15 juin","pick":"Victoire Belgique","cote_conseillée":1.40,"confidence":85,"analysis":"Analyse détaillée en 2-3 phrases...","tip_type":"1X2"}]`,
+        messages:[{role:'user',content:'Génère 5 pronostics détaillés pour : Iran-NZ (Gr.G, 15/6), Belgique-Egypte (Gr.G, 15/6), France-Irak (Gr.I, 16/6), Argentine-Algérie (Gr.J, 17/6), Portugal-Ouzbékistan (Gr.K, 17/6). JSON uniquement.'}]
+      })
+    });
+    const data = await resp.json();
+    let text = data.content?.[0]?.text || '[]';
+    text = text.replace(/```json|```/g,'').trim();
+    const pronos = JSON.parse(text);
+    document.getElementById('pronostics-section').innerHTML = pronos.map(p => `
+    <div class="prono-full">
+      <div class="prono-header">
+        <div>
+          <div class="prono-match-name">⚽ ${p.match}</div>
+          <div class="prono-group">${p.group} · ${p.date}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:0.72rem;color:var(--muted)">Cote conseillée</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#F59E0B;line-height:1">${(p.cote_conseillée||'–').toFixed ? p.cote_conseillée.toFixed(2) : p.cote_conseillée}</div>
+        </div>
+      </div>
+      <div class="prono-verdict">
+        <div class="prono-pick-label">Pronostic IA</div>
+        <div class="prono-pick-val">✅ ${p.pick}</div>
+      </div>
+      <div class="prono-analysis">${p.analysis}</div>
+      <div class="confidence-row">
+        <span class="conf-label">Confiance :</span>
+        <div class="conf-bar"><div class="conf-fill" style="width:${p.confidence}%"></div></div>
+        <span class="conf-pct">${p.confidence}%</span>
+      </div>
+      <div style="margin-top:1rem">
+        <button onclick="goAffiliate('betclic')" style="background:linear-gradient(135deg,#F59E0B,#C9A84C);border:none;border-radius:8px;padding:0.6rem 1.5rem;color:#000;font-weight:700;font-size:0.85rem;cursor:pointer;letter-spacing:0.02em">Parier sur ce match →</button>
+      </div>
+    </div>`).join('');
+  } catch(e) {
+    document.getElementById('pronostics-section').innerHTML = `<div style="color:var(--muted);padding:1.5rem;text-align:center">Pronostics temporairement indisponibles. Actualisez la page.</div>`;
+  }
+}
+
+renderOdds();
+loadPronostics();
+</script>
+</body>
+</html>
